@@ -2,7 +2,8 @@
 
 A web-based tool for automatic gauge reading using computer vision and deep learning. This application uses YOLOv8 object detection to locate gauges in images and processes them to extract readings automatically.
 
-![Gauge Reader Results]("images\Screenshot 2024-12-23 125448.png")
+![Gauge_Reader_Results](https://github.com/user-attachments/assets/5149774e-3114-46f7-a034-f555871fb8c7)
+
 
 ## Features
 
