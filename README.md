@@ -13,6 +13,32 @@ A web-based tool for automatic gauge reading using computer vision and deep lear
 - Visual feedback with detection and debug images
 - Support for various gauge types
 - Range detection and value extraction
+  
+
+
+## YOLOv8 Training
+The YOLOv8 model was trained using the **Ultralytics** library, a cutting-edge framework for object detection and computer vision tasks. The dataset used for training was sourced from **Roboflow**, a popular platform for dataset preparation and augmentation.
+
+---
+
+## Dataset Description
+This [dataset](https://universe.roboflow.com/aditya07/gauge-detection-cohbz-zerqg) is specifically designed for a gauge detection task in a computer vision project. It provides the following characteristics:
+
+### Key Features
+- **Annotations**:
+  - Needle tip position.
+  - Needle base position.
+  - Minimum and maximum values of the gauge.
+- **Number of Images**:
+  - Approximately 5,000 high-quality images.
+- **Data Augmentation**:
+  - To enhance the robustness of the model, various augmentations were applied to the dataset:
+    - Rotation
+    - Scaling
+    - Brightness and contrast adjustments
+    - Flipping and other transformations.
+
+---
 
 ## Installation
 
@@ -95,4 +121,4 @@ The tool generates two types of output images:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/adityaghai07/Gauge_Reader?tab=MIT-1-ov-file) file for details.
