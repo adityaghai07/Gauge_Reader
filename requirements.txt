@@ -1,4 +1,7 @@
 cv2
 easyocr
 ultralytics
-
+fastapi
+python-multipart
+uvicorn
+jinja2
