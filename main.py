@@ -46,7 +46,7 @@ async def upload_image(file: UploadFile = File(...)):
     
     try:
         
-        model_path = 'models/bestNew.pt'
+        model_path = r'models\bestNew_float32.tflite'
         yolo_output = get_max_confidence_boxes(model_path, str(file_path))
         
         

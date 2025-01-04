@@ -44,7 +44,7 @@ def get_max_confidence_boxes(model_path, image_path, conf_threshold=0.2):
     model = YOLO(model_path)
     
  
-    results = model.predict(image_path, conf=conf_threshold)
+    results = model.predict(image_path, conf=conf_threshold,imgsz=(800, 800))
     
  
     yolo_output = {}
