@@ -28,7 +28,7 @@ This [dataset](https://universe.roboflow.com/aditya07/gauge-detection-cohbz-zerq
 - **Annotations**:
   - Needle tip position.
   - Needle base position.
-  - Minimum and maximum values of the gauge.
+  - Minimum and maximum position (not values) of the gauge.
 - **Number of Images**:
   - Approximately 5,000 high-quality images.
 - **Data Augmentation**:
