@@ -107,6 +107,7 @@ The tool generates two types of output images:
 
 ### Model
 - Replace `bestNew.pt` with your own trained YOLOv8 model
+- The project currently uses `.tflite` type model , the `imgsz` parameter is set to 800X800.
 - Adjust detection parameters in `yolo_functions.py`
 
 
