@@ -47,19 +47,23 @@ async def upload_image(file: UploadFile = File(...)):
     try:
         
         model_path = r'models\bestNew_float32.tflite'
-        yolo_output = get_max_confidence_boxes(model_path, str(file_path))
+        yolo_output,isGaugeThreshold = get_max_confidence_boxes(model_path, str(file_path))
         
-        
+        if isGaugeThreshold < 2:
+            return JSONResponse({
+                "success": False,
+                "message": "Gauge threshold not met"
+            })
         value, min_val, max_val = read_gauge(str(file_path), yolo_output)
-        
+
         return JSONResponse({
-            "success": True,
-            "value": round(value, 1),
-            "min_val": min_val,
-            "max_val": max_val,
-            "image_path": f"/data/{new_filename}",
-            "detection_result": "/results/detection_result.jpg",
-            "gauge_debug": "/results/gauge_debug.jpg"
-        })
+                "success": True,
+                "value": round(value, 1),
+                "min_val": min_val,
+                "max_val": max_val,
+                "image_path": f"/data/{new_filename}",
+                "detection_result": "/results/detection_result.jpg",
+                "gauge_debug": "/results/gauge_debug.jpg"
+            })
     except Exception as e:
         raise HTTPException(500, detail=str(e))
