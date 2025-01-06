@@ -69,11 +69,15 @@ def get_max_confidence_boxes(model_path, image_path, conf_threshold=0.2):
     
    
     image = cv2.imread(image_path)
+    confidenceSum = 0
     
     # Draw only the maximum confidence boxes
     for class_name, data in yolo_output.items():
         coords = data['coordinates']
         conf = data['confidence']
+        
+        confidenceSum += conf
+
         
       
         x1, y1, x2, y2 = map(int, coords)
@@ -91,7 +95,7 @@ def get_max_confidence_boxes(model_path, image_path, conf_threshold=0.2):
    
     formatted_output = {class_name: data['coordinates'] for class_name, data in yolo_output.items()}
     
-    return formatted_output
+    return formatted_output, confidenceSum
 
 
 
