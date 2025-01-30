@@ -7,7 +7,7 @@ from services.helper import get_center, get_angle
 from services.text_ocr import extract_text_value
 
 
-def expand_bbox(bbox, expand_factor_x=1.4, expand_factor_y=1.4, left_weight=0.7, up_weight=0.7):
+def expand_bbox(bbox, expand_factor_x=1.4, expand_factor_y=1.4, left_weight=0.6, up_weight=0.6):
     """
     Expand bounding box with bias towards left and up
     left_weight and up_weight control how much of the expansion goes to left/up vs right/bottom
@@ -67,6 +67,11 @@ def get_max_confidence_boxes(model_path, image_path, conf_threshold=0.2):
                     'class_id': class_id
                 }
     
+    # get the confidence of square_gauge class
+    isSquare = 0
+    if 'square_gauge' in yolo_output:
+        isSquare = yolo_output['square_gauge']['confidence']
+
    
     image = cv2.imread(image_path)
     confidenceSum = 0
@@ -95,11 +100,11 @@ def get_max_confidence_boxes(model_path, image_path, conf_threshold=0.2):
    
     formatted_output = {class_name: data['coordinates'] for class_name, data in yolo_output.items()}
     
-    return formatted_output, confidenceSum
+    return formatted_output, confidenceSum , isSquare
 
 
 
-def read_gauge(image_path, yolo_output):
+def read_gauge(image_path, yolo_output,isSquare):
     """Read gauge value from image using YOLO detected points"""
     reader = easyocr.Reader(['en'])
     img = cv2.imread(image_path)
@@ -120,8 +125,8 @@ def read_gauge(image_path, yolo_output):
     
 
 
-    min_bbox = expand_bbox(yolo_output['minimum'], 2.5)  
-    max_bbox = expand_bbox(yolo_output['maximum'], 2.5)    # Expand boxes by 2.5X
+    min_bbox = expand_bbox(yolo_output['minimum'], 1.5)  
+    max_bbox = expand_bbox(yolo_output['maximum'], 1.5)    # Expand boxes by 2.5X
     
     min_region = img[int(min_bbox[1]):int(min_bbox[3]), 
                     int(min_bbox[0]):int(min_bbox[2])]
@@ -132,7 +137,8 @@ def read_gauge(image_path, yolo_output):
     max_value = extract_text_value(max_region, reader)
     
     
-    min_value = min_value if min_value is not None else 0
+    # min_value = min_value if min_value is not None else 0
+    min_value = 0 
     max_value = max_value if max_value is not None else 100
 
     if max_value==0:
@@ -140,17 +146,25 @@ def read_gauge(image_path, yolo_output):
     
     print(f"OCR values - Min: {min_value}, Max: {max_value}")
     
+
+    if isSquare < 0.7:
    
-    if min_angle <= current_angle <= max_angle:
-        relative_angle = 0
-    elif current_angle < min_angle:
-        relative_angle = min_angle - current_angle
-    else:  
-        relative_angle = 360 - (current_angle - min_angle)
+        if min_angle <= current_angle <= max_angle:
+            relative_angle = 0
+        elif current_angle < min_angle:
+            relative_angle = min_angle - current_angle
+        else:  
+            relative_angle = 360 - (current_angle - min_angle)
         
+        angle_range = 360 - (max_angle - min_angle)
+
+    else:
+        relative_angle = current_angle - min_angle
+        angle_range = max_angle - min_angle
+
     
     value_range = max_value - min_value
-    angle_range = 360 - (max_angle - min_angle)
+    
     current_value = (value_range/angle_range) * relative_angle + min_value
     
     print(f"Angle range: {angle_range:.1f}, Relative angle: {relative_angle:.1f}")
