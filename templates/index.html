@@ -1,233 +1,231 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gauge Reader</title>
-    <link rel="stylesheet" href="/static/styles.css">
-
-</head>
-<body>
-    <div class="container">
-        <h1>Gauge Reader</h1>
-        <div class="upload-form">
-            <input type="file" id="imageInput" accept="image/*">
-            <button class="button" onclick="uploadImage()">Upload and Process</button>
-        </div>
-        
-        <div class="loading">Processing image...</div>
-        
-        <div class="error"></div>
-        
-        <div class="results">
-            <div class="results-panel">
-                <h2>Results:</h2>
-                <div class="value-display">
-                    <strong>Gauge reading:</strong> <span id="gaugeValue"></span>
-                </div>
-                <div class="value-display">
-                    <strong>Range:</strong> <span id="gaugeRange"></span>
-                </div>
-            </div>
-            
-            <div class="image-grid">
-                <div class="image-container">
-                    <h3>Original Image</h3>
-                    <img id="uploadedImage" src="" alt="Uploaded gauge">
-                </div>
-                <div class="image-container">
-                    <h3>Detection Result</h3>
-                    <img id="detectionResult" src="" alt="Detection result">
-                </div>
-                <div class="image-container">
-                    <h3>Gauge Debug</h3>
-                    <img id="gaugeDebug" src="" alt="Gauge debug">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        async function uploadImage() {
-            const fileInput = document.getElementById('imageInput');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                showError('Please select an image file');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            showLoading(true);
-            showError('');
-            
-            try {
-                const response = await fetch('/upload/', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    showResults(data);
-                } else {
-                    showError(data.detail || 'Error processing image');
-                }
-            } catch (error) {
-                showError('Error uploading image');
-            } finally {
-                showLoading(false);
-            }
-        }
-        
-        function showResults(data) {
-            document.querySelector('.results').style.display = 'block';
-            document.getElementById('gaugeValue').textContent = `${data.value}`;
-            document.getElementById('gaugeRange').textContent = `${data.min_val} - ${data.max_val}`;
-            document.getElementById('uploadedImage').src = data.image_path;
-            document.getElementById('detectionResult').src = data.detection_result;
-            document.getElementById('gaugeDebug').src = data.gauge_debug;
-        }
-        
-        function showError(message) {
-            const errorDiv = document.querySelector('.error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = message ? 'block' : 'none';
-        }
-        
-        function showLoading(show) {
-            document.querySelector('.loading').style.display = show ? 'block' : 'none';
-        }
-    </script>
-</body>
-</html> -->
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gauge Reader</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
     <div class="container">
-        <h1>Gauge Reader</h1>
-        <div class="upload-form">
-            <input type="file" id="imageInput" accept="image/*">
-            <button class="button" onclick="uploadImage()">Upload and Process</button>
+      <h1>Gauge Reader</h1>
+      <div class="upload-form">
+        <input type="file" id="imageInput" accept="image/*" />
+        <button class="button" onclick="uploadImage()">
+          Upload and Process
+        </button>
+      </div>
+
+      <div class="loading">Processing image...</div>
+
+      <div class="error"></div>
+
+      <!-- Analog Gauge Results -->
+      <div class="results analog-results">
+        <div class="results-panel">
+          <h2>Results:</h2>
+          <div class="value-display">
+            <strong>Gauge reading:</strong> <span id="gaugeValue"></span>
+          </div>
+          <div class="value-display">
+            <strong>Range:</strong> <span id="gaugeRange"></span>
+          </div>
         </div>
-        
-        <div class="loading">Processing image...</div>
-        
-        <div class="error"></div>
-        
-        <div class="results">
-            <div class="results-panel">
-                <h2>Results:</h2>
-                <div class="value-display">
-                    <strong>Gauge reading:</strong> <span id="gaugeValue"></span>
-                </div>
-                <div class="value-display">
-                    <strong>Range:</strong> <span id="gaugeRange"></span>
-                </div>
-            </div>
-            
-            <div class="image-grid">
-                <div class="image-container">
-                    <h3>Original Image</h3>
-                    <img id="uploadedImage" src="" alt="Uploaded gauge">
-                </div>
-                <div class="image-container">
-                    <h3>Detection Result</h3>
-                    <img id="detectionResult" src="" alt="Detection result">
-                </div>
-                <div class="image-container">
-                    <h3>Gauge Debug</h3>
-                    <img id="gaugeDebug" src="" alt="Gauge debug">
-                </div>
-            </div>
+
+        <div class="image-grid">
+          <div class="image-container">
+            <h3>Original Image</h3>
+            <img id="uploadedImage" src="" alt="Uploaded gauge" />
+          </div>
+          <div class="image-container">
+            <h3>Detection Result</h3>
+            <img id="detectionResult" src="" alt="Detection result" />
+          </div>
+          <div class="image-container">
+            <h3>Gauge Debug</h3>
+            <img id="gaugeDebug" src="" alt="Gauge debug" />
+          </div>
         </div>
+      </div>
+
+      <!-- Digital Gauge Results -->
+      <div class="results digital-results">
+        <div class="results-panel">
+          <h2>Results:</h2>
+          <div class="value-display">
+            <strong>Display reading:</strong> <span id="digitalValue"></span>
+          </div>
+        </div>
+
+        <div class="image-grid">
+          <div class="image-container">
+            <h3>Original Image</h3>
+            <img
+              id="digitalUploadedImage"
+              src=""
+              alt="Uploaded digital gauge"
+            />
+          </div>
+          <div class="image-container">
+            <h3>Detection Result</h3>
+            <img
+              id="digitalDetectionResult"
+              src=""
+              alt="Digital detection result"
+            />
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        async function uploadImage() {
-            const fileInput = document.getElementById('imageInput');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                showError('Please select an image file');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            showLoading(true);
-            showError('');
-            
-            try {
-                const response = await fetch('/upload/', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    if (!data.success) {
-                        // Handle the case when gauge threshold is not met
-                        showError(data.message);
-                        // Hide the results section since we don't have valid gauge readings
-                        document.querySelector('.results').style.display = 'none';
-                        // Clear previous images if any
-                        clearImages();
-                    } else {
-                        // Show results only if successful and threshold is met
-                        showResults(data);
-                        showError(''); // Clear any previous errors
-                    }
-                } else {
-                    showError(data.detail || 'Error processing image');
-                    document.querySelector('.results').style.display = 'none';
-                }
-            } catch (error) {
-                showError('Error uploading image');
-                document.querySelector('.results').style.display = 'none';
-            } finally {
-                showLoading(false);
-            }
-        }
-        
-        function showResults(data) {
-            document.querySelector('.results').style.display = 'block';
-            document.getElementById('gaugeValue').textContent = `${data.value}`;
-            document.getElementById('gaugeRange').textContent = `${data.min_val} - ${data.max_val}`;
-            document.getElementById('uploadedImage').src = data.image_path;
-            document.getElementById('detectionResult').src = data.detection_result;
-            document.getElementById('gaugeDebug').src = data.gauge_debug;
-        }
-        
-        function showError(message) {
-            const errorDiv = document.querySelector('.error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = message ? 'block' : 'none';
-        }
-        
-        function showLoading(show) {
-            document.querySelector('.loading').style.display = show ? 'block' : 'none';
-        }
+            async function uploadImage() {
+              const fileInput = document.getElementById("imageInput");
+              const file = fileInput.files[0];
 
-        function clearImages() {
-            document.getElementById('uploadedImage').src = '';
-            document.getElementById('detectionResult').src = '';
-            document.getElementById('gaugeDebug').src = '';
+              if (!file) {
+                showError("Please select an image file");
+                return;
+              }
+
+              const formData = new FormData();
+              formData.append("file", file);
+
+              showLoading(true);
+              showError("");
+              hideAllResults();
+
+              try {
+                clearImages();
+                const response = await fetch("/upload/", {
+                  method: "POST",
+                  body: formData,
+                });
+
+                const data = await response.json();
+
+
+              //   if (response.ok && data.success) {
+              //     // Add timestamp to prevent browser caching
+              //     const timestamp = new Date().getTime();
+
+              //     if (data.display_text !== undefined) {
+              //       // Digital gauge
+              //       data.image_path = `${data.image_path}?t=${timestamp}`;
+              //       data.detection_result = `${data.detection_result}?t=${timestamp}`;
+              //     } else {
+              //       // Analog gauge
+              //       data.image_path = `${data.image_path}?t=${timestamp}`;
+              //       data.detection_result = `${data.detection_result}?t=${timestamp}`;
+              //       data.gauge_debug = `${data.gauge_debug}?t=${timestamp}`;
+              //     }
+
+              //     // Show results with updated image paths
+              //     if (data.display_text !== undefined) {
+              //       showDigitalResults(data);
+              //     } else {
+              //       showAnalogResults(data);
+              //     }
+              //   } else {
+              //     // showError(data.detail || "Error processing image");
+              //     showError('');
+              //     hideAllResults();
+              //   }
+              // }
+              if (response.ok) {
+          if (!data.success) {
+              // Show the threshold message from the backend
+              showError(data.message || "Gauge threshold not met");
+              hideAllResults();
+          } else {
+              // Add timestamp to prevent browser caching
+              const timestamp = new Date().getTime();
+
+              if (data.display_text !== undefined) {
+                  // Digital gauge
+                  data.image_path = `${data.image_path}?t=${timestamp}`;
+                  data.detection_result = `${data.detection_result}?t=${timestamp}`;
+              } else {
+                  // Analog gauge
+                  data.image_path = `${data.image_path}?t=${timestamp}`;
+                  data.detection_result = `${data.detection_result}?t=${timestamp}`;
+                  data.gauge_debug = `${data.gauge_debug}?t=${timestamp}`;
+              }
+
+              // Show results with updated image paths
+              if (data.display_text !== undefined) {
+                  showDigitalResults(data);
+              } else {
+                  showAnalogResults(data);
+              }
+              showError(''); // Clear any errors
+          }
+      } else {
+          showError(data.detail || "Error processing image");
+          hideAllResults();
         }
+                }
+               catch (error) {
+                showError("Error uploading image");
+                hideAllResults();
+              } finally {
+                showLoading(false);
+              }
+            }
+
+            function showAnalogResults(data) {
+              hideAllResults();
+              const analogResults = document.querySelector(".analog-results");
+              analogResults.style.display = "block";
+
+              document.getElementById("gaugeValue").textContent = `${data.value}`;
+              document.getElementById(
+                "gaugeRange"
+              ).textContent = `${data.min_val} - ${data.max_val}`;
+              document.getElementById("uploadedImage").src = data.image_path;
+              document.getElementById("detectionResult").src = data.detection_result;
+              document.getElementById("gaugeDebug").src = data.gauge_debug;
+            }
+
+            function showDigitalResults(data) {
+              hideAllResults();
+              const digitalResults = document.querySelector(".digital-results");
+              digitalResults.style.display = "block";
+
+              document.getElementById("digitalValue").textContent = data.display_text;
+              document.getElementById("digitalUploadedImage").src = data.image_path;
+              document.getElementById("digitalDetectionResult").src =
+                data.detection_result;
+            }
+
+            function hideAllResults() {
+              document.querySelector(".analog-results").style.display = "none";
+              document.querySelector(".digital-results").style.display = "none";
+              clearImages();
+            }
+
+            function clearImages() {
+              // Clear analog gauge images
+              document.getElementById("uploadedImage").src = "";
+              document.getElementById("detectionResult").src = "";
+              document.getElementById("gaugeDebug").src = "";
+
+              // Clear digital gauge images
+              document.getElementById("digitalUploadedImage").src = "";
+              document.getElementById("digitalDetectionResult").src = "";
+            }
+
+            function showError(message) {
+              const errorDiv = document.querySelector(".error");
+              errorDiv.textContent = message;
+              errorDiv.style.display = message ? "block" : "none";
+            }
+
+            function showLoading(show) {
+              document.querySelector(".loading").style.display = show
+                ? "block"
+                : "none";
+            }
     </script>
-</body>
+  </body>
 </html>
